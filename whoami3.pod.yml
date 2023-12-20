@@ -1,0 +1,27 @@
+# RD (resources definition)
+apiVersion: v1
+
+#type de ressource
+kind: Pod
+
+# tags système, libre
+metadata:
+  name: myapp
+  namespace: whoami-ns
+  labels:
+    name: myapp
+    mytag: myValue
+spec:
+  containers:
+  - name: myapp
+    image: traefik/whoami
+    # restart: always // Par défaut, true sur Kube, 'best effort'
+    # healthcheck:...
+    # logging
+    # depends_on: []
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80

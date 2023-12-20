@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  namespace: whoami-ns
+spec:
+  selector:
+    name: myapp
+  type : ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
