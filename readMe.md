@@ -47,4 +47,7 @@ echo "C'est bon, l'appli devrait être dispo :)"
 
 ```
 
+### Remarque
+Dans un autre terminal penser à avoir en arrière plan :
+`minikube tunnel`
 
