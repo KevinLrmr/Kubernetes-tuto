@@ -31,7 +31,8 @@
 ```
 clear
 kubectl delete -f .
-sleep 10
+echo "En attente de la suppression de l'ancienne configuration..."
+sleep 5
 echo "création du namespace..."
 kubectl apply -f kube.ns.yml
 echo "Génération des secrets..."
@@ -42,6 +43,8 @@ kubectl apply -f .
 echo "Lancement des pods terminé ! Veuillez patienter 20 secondes avant de visiter l'URL (temps de lancement de la DB)..."
 sleep 20
 echo "C'est bon, l'appli devrait être dispo :)"
+
+
 ```
 
 
