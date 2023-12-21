@@ -2,7 +2,23 @@
 
 `minikube start`
 
+### Pour ajouter les addons
+
+```
+minikube addons enable ingress
+minikube addons enable ingress-dns
+
+```
+
+### Ajouter le nom de domaine dans le fichier hosts
+
+Sur Windows, présent à l'adresse `C:\windows\system32\drivers\etc\hosts`
+
+Exemple :
+`127.0.0.1 monexemple.com`
+
 ### Lancer le namespace pour pouvoir y greffer les secrets
+
 `kubectl apply -f wordpress-ns`
 
 ### Création des secrets
