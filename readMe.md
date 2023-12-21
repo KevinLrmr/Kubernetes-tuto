@@ -7,7 +7,6 @@
 ```
 minikube addons enable ingress
 minikube addons enable ingress-dns
-
 ```
 
 ### Ajouter le nom de domaine dans le fichier hosts
@@ -22,9 +21,11 @@ Exemple :
 `kubectl apply -f wordpress-ns`
 
 ### Création des secrets
-```kubectl create secret generic mariadb --from-literal=MYSQL_ROOT_PASSWORD=wordpress --from-literal=MYSQL_DATABASE=wordpress --from-literal=MYSQL_USER=wordpress --from-literal=MYSQL_PASSWORD=wordpress -n wordpress-ns```
+```
+kubectl create secret generic mariadb --from-literal=MYSQL_ROOT_PASSWORD=wordpress --from-literal=MYSQL_DATABASE=wordpress --from-literal=MYSQL_USER=wordpress --from-literal=MYSQL_PASSWORD=wordpress -n wordpress-ns
 
-```kubectl create secret generic wordpress --from-literal=WORDPRESS_DB_USER=wordpress --from-literal=WORDPRESS_DB_PASSWORD=wordpress --from-literal=WORDPRESS_DB_NAME=wordpress -n wordpress-ns```
+kubectl create secret generic wordpress --from-literal=WORDPRESS_DB_USER=wordpress --from-literal=WORDPRESS_DB_PASSWORD=wordpress --from-literal=WORDPRESS_DB_NAME=wordpress -n wordpress-ns
+```
 
 ### Pour lancer la construction (aller dans le dossier où se trouve les fichiers de déploiement)
 
@@ -59,7 +60,6 @@ kubectl apply -f .
 echo "Lancement des pods terminé ! Veuillez patienter 20 secondes avant de visiter l'URL (temps de lancement de la DB)..."
 sleep 20
 echo "C'est bon, l'appli devrait être dispo :)"
-
 
 ```
 
