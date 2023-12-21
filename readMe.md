@@ -28,7 +28,8 @@
 ---------------------------
 
 ## Commande complète pour tout lancer :
-`clear
+`
+clear
 kubectl delete -f .
 sleep 10
 echo "création du namespace..."
@@ -39,7 +40,7 @@ kubectl create secret generic wordpress --from-literal=WORDPRESS_DB_USER=wordpre
 echo "Lancement des pods..."
 kubectl apply -f . 
 echo "Lancement des pods terminé ! Veuillez patienter 20 secondes avant de visiter l'URL (temps de lancement de la DB)"
-
+echo ""
 `
 
 
