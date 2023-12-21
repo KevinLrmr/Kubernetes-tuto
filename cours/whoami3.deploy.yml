@@ -1,0 +1,46 @@
+# => RD (resources definitions) => available properties / validators
+apiVersion: apps/v1
+# type de ressource
+kind: Deployment
+# "tags" (système ex name / libres )
+metadata:
+  namespace: whoami-ns
+  name: myapp-deploy
+  labels:
+    name: myapp
+    mytag: myvalue
+# config. tech
+spec:
+  # replicaset
+  replicas: 4
+  selector:
+    matchLabels:
+      name: myapp
+  # pods template
+  strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+  template:
+    metadata:
+      namespace: whoami-ns
+      name: myapp
+      labels:
+        name: myapp
+        mytag: myvalue
+        versionNumber: v2
+    spec:
+      containers:
+      - name: myapp
+        image: traefik/whoami
+        # restart: always # Kube always had a strategy "Best effort" 
+        # healthcheck: ...
+        # logs
+        # depends_on  
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 80

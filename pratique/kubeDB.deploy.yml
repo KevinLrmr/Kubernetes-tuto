@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbservice
+  namespace: wordpress-ns
+spec:
+  selector:
+    name: db
+  type : ClusterIP
+  ports:
+  - port: 3306
+    targetPort: 3306
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: wordpress-ns
+  name: db-deploy
+  labels:
+    name: db
+    mytag: myvalue
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: db
+  strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+  template:
+    metadata:
+      namespace: wordpress-ns
+      name: db
+      labels:
+        name: db
+        mytag: myvalue
+        versionNumber: v1
+    spec:
+      containers:
+      - name: db
+        image: mariadb:10.6.4-focal
+        # restart: always # Kube always had a strategy "Best effort" 
+        # healthcheck: ...
+        # logs
+        # depends_on  
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 80

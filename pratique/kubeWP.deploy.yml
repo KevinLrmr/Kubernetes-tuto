@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wpservice
+  namespace: wordpress-ns
+spec:
+  selector:
+    name: wordpress
+  type : ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: wordpress-ns
+  name: wp-deploy
+  labels:
+    name: wordpress
+    mytag: myvalue
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: wordpress
+  strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+  template:
+    metadata:
+      namespace: wordpress-ns
+      name: wordpress
+      labels:
+        name: wordpress
+        mytag: myvalue
+        versionNumber: v1
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:latest
+        # restart: always # Kube always had a strategy "Best effort" 
+        # healthcheck: ...
+        # logs
+        # depends_on  
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 80
+
+          
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myappingress
+  namespace: wordpress-ns
+  labels:
+    name: wpservice
+spec:
+  rules:
+  - host: whoami.kube
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: wpservice
+            port: 
+              number: 80
