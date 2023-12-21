@@ -1,15 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: dbservice
+  name: db-service
   namespace: wordpress-ns
 spec:
   selector:
-    name: db
+    app: mariadb
   type : ClusterIP
   ports:
-  - port: 3306
-    targetPort: 3306
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+      name: portdb
 
 ---
 
@@ -19,38 +21,40 @@ metadata:
   namespace: wordpress-ns
   name: db-deploy
   labels:
-    name: db
-    mytag: myvalue
-
+    app: mariadb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: db
+      app: mariadb
   strategy:
-      type: RollingUpdate
-      rollingUpdate:
-        maxSurge: 1
-        maxUnavailable: 1
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
-      namespace: wordpress-ns
-      name: db
       labels:
-        name: db
-        mytag: myvalue
+        app: mariadb
         versionNumber: v1
     spec:
       containers:
-      - name: db
+      - name: mariadb
         image: mariadb:10.6.4-focal
-        # restart: always # Kube always had a strategy "Best effort" 
-        # healthcheck: ...
-        # logs
-        # depends_on  
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-          - containerPort: 80
+          - containerPort: 3306
+        args:
+          - "--default-authentication-plugin=mysql_native_password"
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: "wordpress"
+          - name: MYSQL_DATABASE
+            value: "wordpress"
+          - name: MYSQL_USER
+            value: "wordpress"
+          - name: MYSQL_PASSWORD
+            value: "wordpress"
